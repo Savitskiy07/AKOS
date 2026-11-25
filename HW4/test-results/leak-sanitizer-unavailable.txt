@@ -1,0 +1,362 @@
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make BUILD=build-sanitize CFLAGS='-std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie' LDFLAGS='-fsanitize=address,undefined -no-pie' all
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make[1]: Entering directory '/workspace/scratch/2f10b4239350/gallery16'
+mkdir -p build-sanitize
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/server.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_server
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/visitor.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_visitor
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/observer.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_observer
+make[1]: Leaving directory '/workspace/scratch/2f10b4239350/gallery16'
+ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 tests/integration.py --bin build-sanitize
+test_01_sequential_single_capacity (__main__.Integration.test_01_sequential_single_capacity) ... FAIL
+test_02_random_100_visitors_three_observers_and_reconnect (__main__.Integration.test_02_random_100_visitors_three_observers_and_reconnect) ... FAIL
+test_03_300_visitors (__main__.Integration.test_03_300_visitors) ... FAIL
+test_04_all_64_picture_bits (__main__.Integration.test_04_all_64_picture_bits) ... FAIL
+test_05_empty_day (__main__.Integration.test_05_empty_day) ... FAIL
+test_06_fragmented_and_coalesced_commands (__main__.Integration.test_06_fragmented_and_coalesced_commands) ... FAIL
+test_07_duplicate_id_and_bad_handshakes (__main__.Integration.test_07_duplicate_id_and_bad_handshakes) ... FAIL
+test_08_repeat_picture_and_early_exit_rejected (__main__.Integration.test_08_repeat_picture_and_early_exit_rejected) ... FAIL
+test_09_disconnected_visitor_releases_places (__main__.Integration.test_09_disconnected_visitor_releases_places) ... FAIL
+test_10_slow_observer_cannot_stop_gallery (__main__.Integration.test_10_slow_observer_cannot_stop_gallery) ... FAIL
+test_11_signal_during_view (__main__.Integration.test_11_signal_during_view) ... FAIL
+test_12_invalid_arguments (__main__.Integration.test_12_invalid_arguments) ... FAIL
+test_13_observer_is_read_only (__main__.Integration.test_13_observer_is_read_only) ... FAIL
+
+======================================================================
+FAIL: test_01_sequential_single_capacity (__main__.Integration.test_01_sequential_single_capacity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 261, in test_01_sequential_single_capacity
+    h.join(h.visitors_async())
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==742==LeakSanitizer has encountered a fatal error.
+==742==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==742==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_02_random_100_visitors_three_observers_and_reconnect (__main__.Integration.test_02_random_100_visitors_three_observers_and_reconnect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 275, in test_02_random_100_visitors_three_observers_and_reconnect
+    h.join(job)
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==784==LeakSanitizer has encountered a fatal error.
+==784==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==784==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_03_300_visitors (__main__.Integration.test_03_300_visitors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 288, in test_03_300_visitors
+    h.join(h.visitors_async(workers=40))
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==888==LeakSanitizer has encountered a fatal error.
+==888==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==888==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_04_all_64_picture_bits (__main__.Integration.test_04_all_64_picture_bits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 294, in test_04_all_64_picture_bits
+    h.join(h.visitors_async())
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==1043==LeakSanitizer has encountered a fatal error.
+==1043==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1043==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_05_empty_day (__main__.Integration.test_05_empty_day)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 301, in test_05_empty_day
+    h.finish()
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 139, in finish
+    assert code == expected, f"Server exit {code}; {self.text(error=True)}"
+           ^^^^^^^^^^^^^^^^
+AssertionError: Server exit 1; ==1051==LeakSanitizer has encountered a fatal error.
+==1051==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1051==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_06_fragmented_and_coalesced_commands (__main__.Integration.test_06_fragmented_and_coalesced_commands)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 317, in test_06_fragmented_and_coalesced_commands
+    h.finish()
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 139, in finish
+    assert code == expected, f"Server exit {code}; {self.text(error=True)}"
+           ^^^^^^^^^^^^^^^^
+AssertionError: Server exit 1; ==1053==LeakSanitizer has encountered a fatal error.
+==1053==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1053==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_07_duplicate_id_and_bad_handshakes (__main__.Integration.test_07_duplicate_id_and_bad_handshakes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 332, in test_07_duplicate_id_and_bad_handshakes
+    h.join(h.visitors_async([2]))
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 2: exit 1; ==1058==LeakSanitizer has encountered a fatal error.
+==1058==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1058==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_08_repeat_picture_and_early_exit_rejected (__main__.Integration.test_08_repeat_picture_and_early_exit_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 348, in test_08_repeat_picture_and_early_exit_rejected
+    h.join(h.visitors_async([3]))
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 3: exit 1; ==1064==LeakSanitizer has encountered a fatal error.
+==1064==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1064==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_09_disconnected_visitor_releases_places (__main__.Integration.test_09_disconnected_visitor_releases_places)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 365, in test_09_disconnected_visitor_releases_places
+    h.join(job)
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 3: exit 1; ==1070==LeakSanitizer has encountered a fatal error.
+==1070==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1070==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_10_slow_observer_cannot_stop_gallery (__main__.Integration.test_10_slow_observer_cannot_stop_gallery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 376, in test_10_slow_observer_cannot_stop_gallery
+    h.join(h.visitors_async())
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==1079==LeakSanitizer has encountered a fatal error.
+==1079==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1079==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_11_signal_during_view (__main__.Integration.test_11_signal_during_view)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 393, in test_11_signal_during_view
+    h.finish(expected=130)
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 139, in finish
+    assert code == expected, f"Server exit {code}; {self.text(error=True)}"
+           ^^^^^^^^^^^^^^^^
+AssertionError: Server exit 1; NOTICE observer connected snapshot_seq=1
+NOTICE observer disconnected reason=flushed
+==1179==LeakSanitizer has encountered a fatal error.
+==1179==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1179==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+======================================================================
+FAIL: test_12_invalid_arguments (__main__.Integration.test_12_invalid_arguments)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 409, in test_12_invalid_arguments
+    self.assertNotIn(b"Sanitizer", result.stderr)
+AssertionError: b'Sanitizer' unexpectedly found in b'Invalid arguments\n==1183==LeakSanitizer has encountered a fatal error.\n==1183==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==1183==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n'
+
+======================================================================
+FAIL: test_13_observer_is_read_only (__main__.Integration.test_13_observer_is_read_only)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 416, in test_13_observer_is_read_only
+    h.join(h.visitors_async())
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 134, in join
+    raise errors[0]
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 118, in work
+    results.extend(pool.map(one, ids))
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/2f10b4239350/gallery16/tests/integration.py", line 112, in one
+    raise AssertionError(f"Visitor {visitor}: exit {code}; {self.text(f'visitor-{visitor}', True)}")
+AssertionError: Visitor 1: exit 1; ==1189==LeakSanitizer has encountered a fatal error.
+==1189==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==1189==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.027s
+
+FAILED (failures=13)
+make: *** [Makefile:22: sanitize] Error 1
