@@ -1,0 +1,11 @@
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make BUILD=build-analyze CFLAGS='-std=c11 -O0 -g -Wall -Wextra -Wpedantic -Werror -fanalyzer' all
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make[1]: Entering directory '/workspace/scratch/2f10b4239350/gallery16'
+mkdir -p build-analyze
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O0 -g -Wall -Wextra -Wpedantic -Werror -fanalyzer src/server.c src/common.c  -o build-analyze/gallery_server
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O0 -g -Wall -Wextra -Wpedantic -Werror -fanalyzer src/visitor.c src/common.c  -o build-analyze/gallery_visitor
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O0 -g -Wall -Wextra -Wpedantic -Werror -fanalyzer src/observer.c src/common.c  -o build-analyze/gallery_observer
+make[1]: Leaving directory '/workspace/scratch/2f10b4239350/gallery16'

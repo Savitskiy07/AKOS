@@ -1,0 +1,29 @@
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make BUILD=build-sanitize CFLAGS='-std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie' LDFLAGS='-fsanitize=address,undefined -no-pie' all
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make[1]: Entering directory '/workspace/scratch/2f10b4239350/gallery16'
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/server.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_server
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/visitor.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_visitor
+gcc -Isrc -D_POSIX_C_SOURCE=200809L -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie src/observer.c src/common.c -fsanitize=address,undefined -no-pie -o build-sanitize/gallery_observer
+make[1]: Leaving directory '/workspace/scratch/2f10b4239350/gallery16'
+ASAN_OPTIONS="${ASAN_OPTIONS:-detect_leaks=1:halt_on_error=1}" UBSAN_OPTIONS=halt_on_error=1 python3 tests/integration.py --bin build-sanitize
+test_01_sequential_single_capacity (__main__.Integration.test_01_sequential_single_capacity) ... ok
+test_02_random_100_visitors_three_observers_and_reconnect (__main__.Integration.test_02_random_100_visitors_three_observers_and_reconnect) ... ok
+test_03_300_visitors (__main__.Integration.test_03_300_visitors) ... ok
+test_04_all_64_picture_bits (__main__.Integration.test_04_all_64_picture_bits) ... ok
+test_05_empty_day (__main__.Integration.test_05_empty_day) ... ok
+test_06_fragmented_and_coalesced_commands (__main__.Integration.test_06_fragmented_and_coalesced_commands) ... ok
+test_07_duplicate_id_and_bad_handshakes (__main__.Integration.test_07_duplicate_id_and_bad_handshakes) ... ok
+test_08_repeat_picture_and_early_exit_rejected (__main__.Integration.test_08_repeat_picture_and_early_exit_rejected) ... ok
+test_09_disconnected_visitor_releases_places (__main__.Integration.test_09_disconnected_visitor_releases_places) ... ok
+test_10_slow_observer_cannot_stop_gallery (__main__.Integration.test_10_slow_observer_cannot_stop_gallery) ... ok
+test_11_signal_during_view (__main__.Integration.test_11_signal_during_view) ... ok
+test_12_invalid_arguments (__main__.Integration.test_12_invalid_arguments) ... ok
+test_13_observer_is_read_only (__main__.Integration.test_13_observer_is_read_only) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.392s
+
+OK

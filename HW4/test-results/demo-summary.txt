@@ -1,0 +1,5 @@
+make: TMPDIR value /tmp: No such file or directory
+make: using default temporary directory '/tmp'
+make: Nothing to be done for 'all'.
+Demo completed. Logs: /workspace/scratch/2f10b4239350/gallery16/logs/demo
+SUMMARY total=100 arrived=100 finished=100 aborted=0 remaining=0 status=complete
